@@ -20,6 +20,14 @@ def test_args(arr):
     print "ar[{}] = {}".format(i,arr[i])
   print "len(argv) = {}".format(len(arr))
   sys.exit(0)
+  
+def test_acquire(expr_k, _reps):
+    print " ==== TAKE SHOTS ===="
+    for j in range(0, _reps):
+        print "\033[K", i, "\r", #a simple decoration to watching the shot number
+        sys.stdout.flush()
+        camera.acquire(exp[k])
+    
 
 def test_main (argv=None):
     if argv is None:
