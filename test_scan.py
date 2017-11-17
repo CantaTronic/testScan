@@ -1,10 +1,12 @@
 
-from marsct import marssystem
-from marsct import marscamera
+#from marsct import marssystem
+#from marsct import marscamera
 from time import sleep
 from time import time
 from datetime import datetime
 import sys
+
+from testCamera import testCamera 
 
 def print_img(frame, filename):
   f = open(filename, 'w')
@@ -21,12 +23,15 @@ def test_args(arr):
   print "len(argv) = {}".format(len(arr))
   sys.exit(0)
   
-def test_acquire(expr_k, _reps):
+def test_acquire(exp_k, _reps):
+    camera = testCamera()
     print " ==== TAKE SHOTS ===="
     for j in range(0, _reps):
-        print "\033[K", i, "\r", #a simple decoration to watching the shot number
+        print "\033[K", j, "\r", #a simple decoration to watching the shot number
         sys.stdout.flush()
-        camera.acquire(exp[k])
+        camera.acquire(exp_k)
+    print "DONE"
+    sys.exit(0)
     
 
 def test_main (argv=None):
@@ -108,5 +113,7 @@ def test_main (argv=None):
         print " ==== FINISHED ===="
 
 if __name__ == "__main__":
-        sys.exit(test_main())
+    sys.exit(test_acquire(3,6))
+    pass
+        #sys.exit(test_main())
 
