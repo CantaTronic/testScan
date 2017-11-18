@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# marsdir=`pwd`
-marsdir=/usr/lib/marsgui
-export PYTHONPATH="$marsdir":$PYTHONPATH
-
-python test_scan.py
