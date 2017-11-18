@@ -1,2 +1,4 @@
-*.txt
-
+*
+!test_scan.py
+!testSystem.py
+!testCamera.py
