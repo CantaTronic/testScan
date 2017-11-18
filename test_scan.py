@@ -111,9 +111,26 @@ def test_main (argv=None):
         print " ==== FINALIZE ===="
         system.finalise()
         print " ==== FINISHED ===="
+        
+class simple_class:        
+    def simple_function(par):
+        print 'Hello world! :)'
+        print par
+        
+ def simple_function(par):
+        print 'Hello world! :)'
+        print par
 
 if __name__ == "__main__":
-    sys.exit(test_acquire(3,6))
+    #sys.exit(test_acquire(3,6))
+    import timeit
+    from testCamera import testCamera 
+    camera = testCamera()
+    print "Before"
+    #print timeit.timeit("camera.acquire(3)", setup="import test_scan", number=4) #sad, but it doesn't work
+    print timeit.timeit("test_scan.simple_function(3)", setup="import test_scan", number=4) #this test works
+    print timeit.timeit("test_scan.simple_class.simple_function(3)", setup="import test_scan", number=4) #this one doesn't work
+    print "after"
     pass
         #sys.exit(test_main())
 
