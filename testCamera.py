@@ -13,13 +13,18 @@ class testCamera:
         self.dac[thr] = val
         #print self.dac
         
-    def acquire(self,leng):
+    def acquire(self, leng):
         time.sleep(leng)
         print "acquire"
+        
+    def _get_frame(self, i):
+        time.sleep(i)
+        print "get_frame {}".format(i)
         
     def build_frame(self):
         time.sleep(1)
         print "build_frame"
+        return 0
 
 if __name__ == "__main__":
     cam = testCamera()
