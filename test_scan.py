@@ -19,22 +19,29 @@ def print_img(frame, filename):
     f.write('\n')
   f.close()
   
-def test_args(arr):
-  #print out the ginev array and exit
-  for i in range(len(arr)):
-    print "ar[{}] = {}".format(i,arr[i])
-  print "len(argv) = {}".format(len(arr))
-  sys.exit(0)
+def print_log(fname):
+    #tcheck out what we have in log after tests call
+    with open(fname, "r") as f:
+        for line in f:             
+            print(line)
+    f.close()
   
-def test_acquire(exp_k, _reps):
-    camera = testCamera()
-    print " ==== TAKE SHOTS ===="
-    for j in range(0, _reps):
-        print "\033[K", j, "\r", #a simple decoration to watching the shot number
-        sys.stdout.flush()
-        camera.acquire(exp_k)
-    print "DONE"
-    sys.exit(0)
+#def test_args(arr):
+  ##print out the ginev array and exit
+  #for i in range(len(arr)):
+    #print "ar[{}] = {}".format(i,arr[i])
+  #print "len(argv) = {}".format(len(arr))
+  #sys.exit(0)
+  
+#def test_acquire(exp_k, _reps):
+    #camera = testCamera()
+    #print " ==== TAKE SHOTS ===="
+    #for j in range(0, _reps):
+        #print "\033[K", j, "\r", #a simple decoration to watching the shot number
+        #sys.stdout.flush()
+        #camera.acquire(exp_k)
+    #print "DONE"
+    #sys.exit(0)
     
 
 def test_main (argv=None):
@@ -146,10 +153,20 @@ if __name__ == "__main__":
     exp = [1.0, 2.0, 3.0]     #a short toy numbers
     reps = 3
     f = open("ref_test.log", 'w')
-    f.write("Iter {}:\n".format(reps))
+    f.write("Average time for {} iterations :\n".format(reps))
     for i in range(len(exp)):
-        f.write("Exp = {}: average time is : {} \n".format(exp[i], timeit.timeit("camera.acquire(exp[i])", setup="from __main__ import camera; from __main__ import exp; from __main__ import i",number=reps)/reps))
+        f.write("Exp = {}:\n".format(exp[i]))
+        f.write("\tacquire: {}\n".format(timeit.timeit("camera.acquire(exp[i])", setup="from __main__ import camera; from __main__ import exp; from __main__ import i",number=reps)/reps))
+        f.write("\tbuild_frame: {}\n".format(timeit.timeit("camera.build_frame()", setup="from __main__ import camera",number=reps)/reps))
+        
     f.close()
+    
+    #end of tests
+    ##################################################################
     print " ==== FINALIZE ===="
     system.finalise()
     print " ==== FINISHED ===="
+    print "\n===================\n"
+    
+    print " ==== TIMING RESULTS ===="
+    print_log("ref_test.log")

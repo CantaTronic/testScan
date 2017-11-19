@@ -16,6 +16,10 @@ class testCamera:
     def acquire(self,leng):
         time.sleep(leng)
         print "acquire"
+        
+    def build_frame(self):
+        time.sleep(1)
+        print "build_frame"
 
 if __name__ == "__main__":
     cam = testCamera()
