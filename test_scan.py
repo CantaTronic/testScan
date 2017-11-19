@@ -5,8 +5,11 @@ from time import sleep
 from time import time
 from datetime import datetime
 import sys
+import timeit
 
-from testCamera import testCamera 
+from testCamera import testCamera as marscamera
+import testSystem as marssystem
+
 
 def print_img(frame, filename):
   f = open(filename, 'w')
@@ -111,26 +114,42 @@ def test_main (argv=None):
         print " ==== FINALIZE ===="
         system.finalise()
         print " ==== FINISHED ===="
-        
-class simple_class:        
-    def simple_function(par):
-        print 'Hello world! :)'
-        print par
-        
- def simple_function(par):
-        print 'Hello world! :)'
-        print par
+
 
 if __name__ == "__main__":
-    #sys.exit(test_acquire(3,6))
-    import timeit
-    from testCamera import testCamera 
-    camera = testCamera()
-    print "Before"
-    #print timeit.timeit("camera.acquire(3)", setup="import test_scan", number=4) #sad, but it doesn't work
-    print timeit.timeit("test_scan.simple_function(3)", setup="import test_scan", number=4) #this test works
-    print timeit.timeit("test_scan.simple_class.simple_function(3)", setup="import test_scan", number=4) #this one doesn't work
-    print "after"
-    pass
-        #sys.exit(test_main())
-
+    
+    #################################################################
+    #set up testing environment
+    print " ==== INITIALIZE CAMERA ===="
+    system = marssystem.MarsSystem()
+    camera = system.getCamera()
+    
+    print " ==== SET MODE ===="
+    thresholds = [50, 15, 27, 18, 30, 21, 33, 24]
+    for i in range(camera.chipcount):
+        thresholds[i] = 44+i*11
+        print "threshold{} = {}".format(i, thresholds[i])
+        for j in range(len(thresholds)):
+            camera.set_dac("Threshold{}".format(j), thresholds[j], i)
+    print " ==== CAMERA INITIALIZED ===="
+    
+    print " ==== WAIT FOR HV WARMUP ===="
+    #while camera.hv_state != marscamera.HV_ON:
+        #sleep(1)
+    #end of set up
+    ##################################################################
+    
+    #####################---TESTING---################################
+    
+    #exp = [10.0, 20.0, 50.0, 100.0, 200.0]  #the real numbers
+    #exp = [1.0, 2.0, 5.0, 10.0]     #the toy numbers
+    exp = [1.0, 2.0, 3.0]     #a short toy numbers
+    reps = 3
+    f = open("ref_test.log", 'w')
+    f.write("Iter {}:\n".format(reps))
+    for i in range(len(exp)):
+        f.write("Exp = {}: average time is : {} \n".format(exp[i], timeit.timeit("camera.acquire(exp[i])", setup="from __main__ import camera; from __main__ import exp; from __main__ import i",number=reps)/reps))
+    f.close()
+    print " ==== FINALIZE ===="
+    system.finalise()
+    print " ==== FINISHED ===="
