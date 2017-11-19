@@ -30,8 +30,16 @@ def print_log(fname):
 def getFrame(camera):
     for i in range(camera.chipcount):
         camera._get_frame(i)
+        
 
 if __name__ == "__main__":
+    #set up the number of repetitions for timing (or exit)
+    argv = sys.argv
+    if len(argv) < 2:
+        print "Not enough arguments. Exiting..."
+        sys.exit(0)
+    else:
+        reps = int(argv[1])
     
     #################################################################
     #set up testing environment
@@ -59,7 +67,6 @@ if __name__ == "__main__":
     #exp = [10.0, 20.0, 50.0, 100.0, 200.0]  #the real numbers
     #exp = [1.0, 2.0, 5.0, 10.0]     #the toy numbers
     exp = [1.0, 2.0, 3.0]     #a short toy numbers
-    reps = 3
     f = open("ref_test.log", 'w')
     f.write("Average time for {} iterations :\n".format(reps))
     for i in range(len(exp)):
